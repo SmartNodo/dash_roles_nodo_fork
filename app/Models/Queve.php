@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 use Laravel\Sanctum\HasApiTokens;
 
 class Queve extends Model
@@ -18,4 +19,7 @@ class Queve extends Model
         'nss',
         'status',
     ]; 
+
+    public $timestamps = false;
+
 }
