@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Role;
+use Spatie\Permission\Models\Role;
 
 
 class SuperAdminSeeder extends Seeder
@@ -25,10 +25,10 @@ class SuperAdminSeeder extends Seeder
         ]);
 
         //Para cuando no se ha creador el rol Administrador
-        // $rol = Role::create(['name'=>'Administrador']);
-        // $permisos = Permission::pluck('id','id')->all();
-        // $rol->syncPermissions($permisos);
-        // $usuario->assignRole([$rol->id]);
+        $rol = Role::create(['name'=>'Administrador']);
+        $permisos = Permission::pluck('id','id')->all();
+        $rol->syncPermissions($permisos);
+        $usuario->assignRole([$rol->id]);
 
         // Cuando ya tenemos el rol Administrador
         // $rol = Role::create(['name'=>'Administrador']);
