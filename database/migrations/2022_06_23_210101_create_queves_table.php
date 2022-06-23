@@ -15,9 +15,9 @@ class CreateQuevesTable extends Migration
     {
         Schema::create('queves', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')->unsigned();
             $table->smallInteger('idState');
             $table->integer('nss');
-            $table->integer('user_id')->unsigned();
             $table->smallInteger('status');
             $table->integer('balance')->nullable();
             $table->string('email')->nullable();

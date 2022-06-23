@@ -14,6 +14,7 @@ class Queve extends Model
 
     protected $fillable = [
         'user_id',
+        'idState',
         'nss',
         'status',
     ]; 
