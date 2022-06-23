@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
+use App\Models\Queve;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-use App\Models\Queve;
 use Illuminate\Support\Facades\Hash;
 
 
 class QueveController extends Controller
 {
-    public function createQueve(Request $request) {        
+    public function createQueve(Request $request) {      
         //validacion
         $request->validate([
             "nss" => "required",
@@ -28,6 +29,9 @@ class QueveController extends Controller
         $queve->email = '';
         $queve->description = '';
         $queve->isError = '';
+        $queve->dateOfInsert = Carbon::now();
+        $queve->dateOfConfirm = Carbon::now();
+        $queve->dateLastUpdate = Carbon::now();
         
 
         $queve->save();

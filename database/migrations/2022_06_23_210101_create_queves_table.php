@@ -18,8 +18,8 @@ class CreateQuevesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->smallInteger('idState');
             $table->integer('nss');
-            $table->smallInteger('status');
-            $table->integer('balance')->nullable();
+            $table->smallInteger('status')->default('0');
+            $table->integer('balance')->nullable()->default('0');
             $table->string('email')->nullable();
             $table->string('description')->nullable();
             $table->string('isError')->nullable();
