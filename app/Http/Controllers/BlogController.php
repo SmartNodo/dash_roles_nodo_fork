@@ -30,13 +30,12 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-                'titulo' => 'required', 
-                'contenido'=>'required'
-            ]
-        );
+            'titulo' => 'required',
+            'contenido'=>'required'
+        ]);
 
-        Role::create($request->all());
-
+        Blog::create($request->all());
+    
         return redirect()->route('blogs.index');
     }
 
@@ -48,20 +47,19 @@ class BlogController extends Controller
     public function update(Request $request, Blog $blog)
     {
         $this->validate($request, [
-                'titulo' => 'required', 
-                'contenido'=>'required'
-            ]
-        );
-
+            'titulo' => 'required',
+            'contenido' => 'required'
+        ]);
+    
         $blog->update($request->all());
-
+    
         return redirect()->route('blogs.index');
     }
 
     public function destroy(Blog $blog)
     {
         $blog->delete();
-
+    
         return redirect()->route('blogs.index');
     }
 }
