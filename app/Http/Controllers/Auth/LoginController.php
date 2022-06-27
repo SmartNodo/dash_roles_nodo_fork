@@ -6,6 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Http\Request;
+use App\Models\User;
+
+use Illuminate\Support\Facades\Hash;
+
+use Session;
+
+
 class LoginController extends Controller
 {
     /*
@@ -36,5 +44,35 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            "email" => "required|email",
+            "password" => "required"
+        ]);
+
+        $user = User::where("email", "=", $request->email)->first();
+
+        if( isset($user->id) ){
+            if(Hash::check($request->password, $user->password)){
+                // Eliminamos tokens anteriores
+                $user->tokens()->delete();
+                //creamos el token
+                $token = $user->createToken("auth_token")->plainTextToken;
+                Session::put('bearer_token', $token);
+
+                $this->guard()->login($user, $request->has('remember'));    
+                return redirect()->route('home');
+       
+            }else{
+                return redirect()->route('login'); 
+            }
+
+        }else{
+            return redirect()->route('login'); 
+        }
+          
     }
 }
