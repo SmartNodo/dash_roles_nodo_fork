@@ -19,7 +19,7 @@ class CreateConsultedCreditsTable extends Migration
             $table->unsignedBigInteger('idState_state');
             $table->unsignedBigInteger('user_id');
 
-            $table->integer('nss');
+            $table->integer('nss')->nullable();
             $table->string('creditNumber', 12);
             $table->enum('status', ['pendiente', 'consultado', 'bloqueado'])->nullable();
             $table->string('balance')->nullable();
