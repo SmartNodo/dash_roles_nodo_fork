@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\ConsultedCredit as Credit;
 use App\Models\State;
+use App\Providers\ScrapeCreditNumber;
+use Illuminate\Support\Facades\DB;
 
 class CreditConsulterController extends Controller
 {
@@ -92,12 +94,6 @@ class CreditConsulterController extends Controller
 
     public function saveNewCreditoConsulted(Request $request)
     {
-        // dd($request->all());
-
-        /* $request->all()
-            "creditNumber" => "1420207732"
-            "idState" => "3"
-        */
 
         Credit::create([
             'idState_state' => $request->idState,
@@ -106,6 +102,9 @@ class CreditConsulterController extends Controller
             'status' => 'pendiente',
             'consultedDate' => Carbon::now()
         ]);
+
+        $result = event( new ScrapeCreditNumber($request->creditNumber) );
+
 
         /* $consulted_credit[0]
             "idCreditType_creditType" => 1
@@ -139,7 +138,6 @@ class CreditConsulterController extends Controller
             "statusAux" => 0
         */
 
-
         // Guarda la información en la tabla consulted_credits con status = to_consult;
         // Credit::create([
         //     'idState_state' => $consulted_credit->idState_state,
@@ -158,11 +156,10 @@ class CreditConsulterController extends Controller
         return new JsonResponse([
             'success' => true,
             'status' => 'pendiente',
+            'result' => $result,
             'message' => 'Crédito por consultar guardado correctamente!',
             'creditNumber' => $request->creditNumber
         ], 200);
-
-
 
     }
 

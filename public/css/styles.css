@@ -60,6 +60,10 @@ img {
   vertical-align: middle;
 }
 
+.container-result {
+  display: none;
+}
+
 .wizard {
   width: 451px;
   position: relative;

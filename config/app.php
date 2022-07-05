@@ -176,7 +176,10 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         //Spatie
-        Spatie\Permission\PermissionServiceProvider::class
+        Spatie\Permission\PermissionServiceProvider::class,
+
+        // Goutte (scraper)
+        Weidner\Goutte\GoutteServiceProvider::class,
     ],
 
     /*
@@ -231,7 +234,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        // Goutte (scraper)
+        'Goutte' => Weidner\Goutte\GoutteFacade::class,
     ],
 
 ];

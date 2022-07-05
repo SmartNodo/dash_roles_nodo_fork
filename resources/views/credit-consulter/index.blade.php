@@ -57,8 +57,19 @@
                 </section>
             </form>
           </div>
+
+          <div class="col-6 container-result">
+            <section>
+                <div class="inner">
+                    <h1 class="text-center py-4">Resultado</h1>
+                    <div id="result">
+
+                    </div>
+                </div>
+            </section>
+          </div>
         </div>
-      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
@@ -100,11 +111,35 @@
                 body: JSON.stringify(data),
             })
 
-            console.log(response)
-
             const result = await response.json()
+            document.getElementById('result')
 
-            console.log(result)
+            document.querySelector('.container-result').style.display = "block";
+
+            console.log('result')
+            console.log(result.result)
+            console.log(result.result[0]['ahorroEcoSalario'])
+
+            let resultContainer = document.getElementById('result');
+            // Vaciar el contenedor
+            resultContainer.innerHTML = "";
+
+            // <p> Estado ${result.result[0]['estado']} </p>
+            // <p> ${result.result[0]['usuarioSimulado']} </p>
+            // <p> ${result.result[0]['isBroxel']} </p>
+            // <p> ${result.result[0]['marcaVista']} </p>
+            // <p> ${result.result[0]['estadoMunicipio']} </p>
+
+            resultContainer.innerHTML = `
+                <p> Nombre Acreditado: ${result.result[0]['nombreDH']} </p>
+                <p> NSS: ${result.result[0]['nss']} </p>
+                <p> Dirección Vivienda: ${result.result[0]['domicilio']} </p>
+                <p> Código postal: ${result.result[0]['codigoPostal']} </p>
+                <p> Monto de la Constancia para la compra de ecotecnologías: $${result.result[0]['costoEcoTec']} </p>
+                <p> Ahorro Minimo Requerido: $${result.result[0]['ahorroEcoSalario']} </p>
+                <p> ${result.result[0]['numAvaluo']} </p>
+            `;
+
         }
 
     </script>

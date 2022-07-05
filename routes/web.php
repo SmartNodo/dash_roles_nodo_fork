@@ -32,7 +32,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('blogs', BlogController::class);
 });
 
-Route::get('consultar-credito', [CreditConsulterController::class, 'index']);
+Route::get('consulta', [CreditConsulterController::class, 'index']);
 
 // -- Rutas de prueba para Frontend (sin usar API) --
 Route::post('guardar-consulta', [CreditConsulterController::class, 'saveNewCreditoConsulted']);
