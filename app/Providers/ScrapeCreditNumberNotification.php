@@ -41,13 +41,13 @@ class ScrapeCreditNumberNotification
 
         Log::info('method: ',['method' => $method]);
 
-        $user = 'IERURC06';
-        $pass = 'Tecate04';
+        // $user = 'IERURC06';
+        // $pass = 'Tecate04';
 
         $test = $crawler->filter('form')->form([
             'method' => $method,
-            'usuario' => $user,
-            'password' => $pass,
+            'usuario' => $event->user,
+            'password' => $event->pass,
         ]);
 
         Log::info('test: ',['test' => $test]);

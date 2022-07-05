@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\QueveController;
+use App\Http\Controllers\Api\CreditConsulterController;
 
 
 Route::post('register', [UserController::class, 'register']);
@@ -22,6 +23,9 @@ Route::group( ['middleware' => ["auth:sanctum"]], function(){
 
     Route::put("update-queve/{id}", [QueveController::class, "updateQueve"]);
     Route::delete("delete-queve/{id}", [QueveController::class, "deleteQueve"]);
+
+    // Ruta para guardar crédito en la BD
+    Route::post('check-credit-number', [CreditConsulterController::class, 'checkCreditNumber']);
 
 });
 

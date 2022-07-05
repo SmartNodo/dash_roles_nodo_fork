@@ -30,10 +30,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('blogs', BlogController::class);
+
+    // Muestra vista de consultas de crédito
+    Route::get('consulta', [CreditConsulterController::class, 'index']);
 });
 
-Route::get('consulta', [CreditConsulterController::class, 'index']);
 
 // -- Rutas de prueba para Frontend (sin usar API) --
-Route::post('guardar-consulta', [CreditConsulterController::class, 'saveNewCreditoConsulted']);
+Route::post('guardar-consulta', [CreditConsulterController::class, 'saveNewCreditConsulted']);
 // Route::post('consultar-credito', [CreditConsulterController::class, 'getCreditNumberInfo']);

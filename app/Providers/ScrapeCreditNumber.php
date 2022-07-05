@@ -21,9 +21,11 @@ class ScrapeCreditNumber
      *
      * @return void
      */
-    public function __construct($creditNumber)
+    public function __construct($creditNumber, $user, $pass)
     {
         $this->creditNumber = $creditNumber;
+        $this->user = $user;
+        $this->pass = $pass;
     }
 
     /**

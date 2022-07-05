@@ -89,7 +89,6 @@
                 creditNumber: creditNumber,
                 idState: idState
             }
-
             saveQuery(data)
 
             // 2.- Ejecutar Scraper
@@ -103,16 +102,11 @@
 
         const saveQuery = async (data) => {
 
-            const _token = "{{Session::get('bearer_token')}}"
-            // console.log(_token)
-
-            const response = await fetch('api/check-credit-number', {
+            const response = await fetch('guardar-consulta', {
                 method: 'POST',
                 headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${_token}`,
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify(data),
             })
@@ -124,21 +118,28 @@
 
             console.log('result')
             console.log(result.result)
-            // console.log(result.result[0])
+            console.log(result.result[0]['ahorroEcoSalario'])
 
             let resultContainer = document.getElementById('result');
             // Vaciar el contenedor
             resultContainer.innerHTML = "";
 
+            // <p> Estado ${result.result[0]['estado']} </p>
+            // <p> ${result.result[0]['usuarioSimulado']} </p>
+            // <p> ${result.result[0]['isBroxel']} </p>
+            // <p> ${result.result[0]['marcaVista']} </p>
+            // <p> ${result.result[0]['estadoMunicipio']} </p>
+
             resultContainer.innerHTML = `
-                <p> <b>Nombre Acreditado </b>: ${result.result[0]['nombreDH']} </p>
-                <p> <b>NSS </b>: ${result.result[0]['nss']} </p>
-                <p> <b>Dirección Vivienda </b>: ${result.result[0]['domicilio']} </p>
-                <p> <b>Código postal </b>: ${result.result[0]['codigoPostal']} </p>
-                <p> <b>Monto de la Constancia para la compra de ecotecnologías </b>: $${result.result[0]['costoEcoTec']} </p>
-                <p> <b>Ahorro Minimo Requerido </b>: $${result.result[0]['ahorroEcoSalario']} </p>
+                <p> Nombre Acreditado: ${result.result[0]['nombreDH']} </p>
+                <p> NSS: ${result.result[0]['nss']} </p>
+                <p> Dirección Vivienda: ${result.result[0]['domicilio']} </p>
+                <p> Código postal: ${result.result[0]['codigoPostal']} </p>
+                <p> Monto de la Constancia para la compra de ecotecnologías: $${result.result[0]['costoEcoTec']} </p>
+                <p> Ahorro Minimo Requerido: $${result.result[0]['ahorroEcoSalario']} </p>
                 <p> ${result.result[0]['numAvaluo']} </p>
             `;
+
         }
 
     </script>
