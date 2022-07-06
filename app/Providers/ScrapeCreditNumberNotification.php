@@ -49,8 +49,7 @@ class ScrapeCreditNumberNotification
             'usuario' => $event->user,
             'password' => $event->pass,
         ]);
-
-        Log::info('test: ',['test' => $test]);
+        Log::info('test: ',['test' => $test]); // -> doLogin
 
         $crawler = $client->submit($test);
         Log::info('test: ',['crawler' => $crawler]);
@@ -59,11 +58,21 @@ class ScrapeCreditNumberNotification
         // $creditNumber = '1420208694'; -> has error
         // $creditNumber = '0222036775';
 
+        try {
+            $form_credit_number = $crawler->filter('form')->form([
+                'method' => $method,
+                'numeroCredito' => $event->creditNumber,
+            ]);
+        } catch (\Throwable $th) {
+            if( $th->getMessage() == 'Unreachable field "numeroCredito".' ) {
+                $e = 'Es probable que el número de crédito no corresponda al estado seleccionado';
+            } else {
+                $e = $th->getMessage();
+            }
 
-        $form_credit_number = $crawler->filter('form')->form([
-            'method' => $method,
-            'numeroCredito' => $event->creditNumber,
-        ]);
+            return ['error' => $e];
+        }
+
         Log::info('form_credit_number: ',['form_credit_number' => $form_credit_number]);
 
         $result = $client->submit($form_credit_number);

@@ -15,12 +15,17 @@ class CreditConsulterController extends Controller
 {
     public function checkCreditNumber(Request $request)
     {
-
         // 1.- Obtiene las llaves del estado solicitado:
         $access_key = AccessKey::find($request->idState);
 
         // Ejecuta el scraper
         $result = event( new ScrapeCreditNumber($request->creditNumber, $access_key->user, $access_key->pass) );
+
+        // dd(isset($result[0]['error']) && $result[0]['error']);
+
+        if(isset($result[0]['error']) && $result[0]['error']) {
+            return $result[0];
+        }
 
         // Guarda el crédito 'consultado' con los datos extraídos por el scraper
         Credit::create([
@@ -40,7 +45,7 @@ class CreditConsulterController extends Controller
         return new JsonResponse([
             'success' => true,
             'status' => 'consultado',
-            'result' => $result,
+            'result' => $result[0],
             'message' => 'Crédito por consultar guardado correctamente!',
             'creditNumber' => $request->creditNumber
         ], 200);

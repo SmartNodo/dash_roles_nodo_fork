@@ -64,6 +64,10 @@ img {
   display: none;
 }
 
+#error {
+  display: none;
+}
+
 .wizard {
   width: 451px;
   position: relative;

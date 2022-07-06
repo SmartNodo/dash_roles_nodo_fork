@@ -43,14 +43,10 @@
                             </div>
                             <div class="form-row form-group justify-content-center">
                                 <button type="submit" class="text-center" id="btn-send-query" >Consultar</button>
-                            {{--
-                                <div class="actions clearfix">
-                                    <ul role="menu" aria-label="Pagination">
-                                        <li aria-hidden="false" aria-disabled="false">
-                                            <a href="#next" role="menuitem">Next</a>
-                                        </li>
-                                    </ul>
-                                </div> --}}
+                            </div>
+                        </div>
+                        <div class="col" id="error">
+                            <div class="alert alert-danger" role="alert">
                             </div>
                         </div>
                     </div>
@@ -61,9 +57,8 @@
           <div class="col-6 container-result">
             <section>
                 <div class="inner">
-                    <h1 class="text-center py-4">Resultado</h1>
+                    <h2 class="text-center py-4">Datos del Acreditado</h2>
                     <div id="result">
-
                     </div>
                 </div>
             </section>
@@ -102,10 +97,19 @@
 
 
         const saveQuery = async (data) => {
-
             const _token = "{{Session::get('bearer_token')}}"
-            // console.log(_token)
 
+            // Contenedores:
+            let errorContainer = document.getElementById('error')
+            errorContainer.innerHTML = ""
+
+            document.querySelector('.container-result').style.display = "none";
+
+            let resultContainer = document.getElementById('result')
+            resultContainer.innerHTML = ""
+
+
+            // 1- Petición api para consultar crédito
             const response = await fetch('api/check-credit-number', {
                 method: 'POST',
                 headers: {
@@ -118,27 +122,52 @@
             })
 
             const result = await response.json()
-            document.getElementById('result')
 
+            // 2. Si el crédito tiene error
+            if(result.error) {
+                // Vaciar el contenedor
+                errorContainer.innerHTML = `<div class="alert alert-danger" role="alert"> ${result.error} </div>`
+                errorContainer.style.display = "block"
+                return 0
+            } else {
+                errorContainer.style.display = "none"
+            }
+
+            // 3. Si el crédito no tiene error: pinta el resultado
+            const r = result.result
+
+            // Mostrar contenedor
             document.querySelector('.container-result').style.display = "block";
-
-            console.log('result')
-            console.log(result.result)
-            // console.log(result.result[0])
-
-            let resultContainer = document.getElementById('result');
             // Vaciar el contenedor
-            resultContainer.innerHTML = "";
-
             resultContainer.innerHTML = `
-                <p> <b>Nombre Acreditado </b>: ${result.result[0]['nombreDH']} </p>
-                <p> <b>NSS </b>: ${result.result[0]['nss']} </p>
-                <p> <b>Dirección Vivienda </b>: ${result.result[0]['domicilio']} </p>
-                <p> <b>Código postal </b>: ${result.result[0]['codigoPostal']} </p>
-                <p> <b>Monto de la Constancia para la compra de ecotecnologías </b>: $${result.result[0]['costoEcoTec']} </p>
-                <p> <b>Ahorro Minimo Requerido </b>: $${result.result[0]['ahorroEcoSalario']} </p>
-                <p> ${result.result[0]['numAvaluo']} </p>
-            `;
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">Nombre Acreditado</th>
+                        <td> ${result.result['nombreDH']} </td>
+                    </tr>
+                    <tr>
+                        <th>NSS</th>
+                        <td>${result.result['nss']}</td>
+                    </tr>
+                    <tr>
+                        <th>Dirección Vivienda</th>
+                        <td>${result.result['domicilio']}</td>
+                    </tr>
+                    <tr>
+                        <th>Código postal</th>
+                        <td> ${result.result['codigoPostal']}</td>
+                    </tr>
+                    <tr>
+                        <th>Balance</th>
+                        <td>$${result.result['costoEcoTec']}</td>
+                    </tr>
+                    <tr>
+                        <th>Ahorro Minimo Requerido</th>
+                        <td>$${result.result['ahorroEcoSalario']}</td>
+                    </tr>
+                    </tbody>
+            </table>`
         }
 
     </script>
