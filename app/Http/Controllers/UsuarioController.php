@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
-use App\Http\Controllers\Controller;
+use App\Models\Team;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\TeamUser;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 
 class UsuarioController extends Controller
@@ -33,7 +35,8 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles = Role::pluck('name', 'name')->all();
-        return view('usuarios.crear', compact('roles'));
+        $teams = Team::select('id', 'name')->get();
+        return view('usuarios.crear', compact('roles','teams'));
     }
 
     /**
@@ -48,7 +51,8 @@ class UsuarioController extends Controller
                 'name' => 'required', 
                 'email'=>'required|email|unique:users,email',
                 'password'=>'required|same:confirm-password',
-                'roles'=>'required'
+                'roles'=>'required',
+                'teams'=>'required'
         ]);
 
         $input = $request->all();
@@ -56,6 +60,17 @@ class UsuarioController extends Controller
         
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
+
+
+        foreach($request->teams as $k => $v){
+            $TeamUser = TeamUser::updateOrCreate(
+                ['team_id' =>  $v],
+                ['user_id' => $user->id]
+            );
+        }
+
+
+        // $user_team = 
 
         return redirect()->route('usuarios.index');
     }
@@ -71,9 +86,20 @@ class UsuarioController extends Controller
     {
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
+        $teams = Team::select('id', 'name')->get();
+        $teamsUser = TeamUser::where('user_id',$id)->get();
+
+        foreach($teams as $k => $v){        
+            foreach($teamsUser as $k2 => $v2){
+                if($v->id == $v2->team_id){
+                    $teams[$k]['s'] =  'selected';                 
+                }
+            }
+        }
+
         $userRole = $user->roles->pluck('name', 'name')->all();
 
-        return view('usuarios.editar', compact('user','roles','userRole'));
+        return view('usuarios.editar', compact('user','roles','userRole','teams'));
 
 
     }
@@ -91,7 +117,8 @@ class UsuarioController extends Controller
                 'name' => 'required', 
                 'email'=>'required|email|unique:users,email,'.$id,
                 'password'=>'same:confirm-password',
-                'roles'=>'required'
+                'roles'=>'required',
+                'teams'=>'required'
         ]);
 
         $input = $request->all();
@@ -106,6 +133,16 @@ class UsuarioController extends Controller
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 
         $user->assignRole($request->input('roles'));
+        
+        TeamUser::where('user_id', $user->id)->delete();
+        
+        foreach($request->teams as $k => $v){
+            
+            $TeamUser = TeamUser::updateOrCreate(
+                ['team_id' =>  $v],
+                ['user_id' => $user->id]
+            );
+        }
 
         return redirect()->route('usuarios.index');
     
