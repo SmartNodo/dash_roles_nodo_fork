@@ -49,7 +49,7 @@
                                                 $cant_credit = ConsultedCredit::count();                                                
                                                 @endphp
                                                 <h2 class="text-right"><i class="fa fa-blog f-left"></i><span>{{$cant_credit}}</span></h2>
-                                                <p class="m-b-0 text-right"><a href="/blogs" class="text-white">Ver más</a></p>
+                                                <p class="m-b-0 text-right"><a href="/creditos" class="text-white">Ver más</a></p>
                                             </div>
                                         </div>
                                     </div>

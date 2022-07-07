@@ -29,10 +29,12 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
-    Route::resource('blogs', BlogController::class);
+    // Route::resource('blogs', BlogController::class);
 
     // Muestra vista de consultas de crédito
     Route::get('consulta', [CreditConsulterController::class, 'index']);
+
+    Route::get('creditos', [CreditConsulterController::class, 'creditos']);
 });
 
 
