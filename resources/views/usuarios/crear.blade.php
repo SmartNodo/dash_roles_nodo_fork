@@ -60,7 +60,7 @@
                                                 <label for="name">Equipo</label>
                                                 {{-- {!! Form::select('teams[]', $teams,[], array('class'=>'form-control','multiple'=>'multiple','name'=>'teams["name"]')) !!}                                                 --}}
 
-                                                <select class="form-control" multiple="multiple" name="teams[]" id="teams">
+                                                <select class="form-control" multiple="multiple" name="teams[]" id="teams" style="height: auto;">
                                                     @foreach($teams as $k => $team)                                                    
                                                             <option value="{{$team->id}}" >{{$team->name}}</option>                                                        
                                                     @endforeach

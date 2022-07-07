@@ -61,16 +61,12 @@ class UsuarioController extends Controller
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
 
-
         foreach($request->teams as $k => $v){
-            $TeamUser = TeamUser::updateOrCreate(
-                ['team_id' =>  $v],
-                ['user_id' => $user->id]
-            );
+            $TeamUser = new TeamUser;
+            $TeamUser->team_id = $v;
+            $TeamUser->user_id = $user->id;
+            $TeamUser->save();
         }
-
-
-        // $user_team = 
 
         return redirect()->route('usuarios.index');
     }
@@ -135,13 +131,12 @@ class UsuarioController extends Controller
         $user->assignRole($request->input('roles'));
         
         TeamUser::where('user_id', $user->id)->delete();
-        
+
         foreach($request->teams as $k => $v){
-            
-            $TeamUser = TeamUser::updateOrCreate(
-                ['team_id' =>  $v],
-                ['user_id' => $user->id]
-            );
+            $TeamUser = new TeamUser;
+            $TeamUser->team_id = $v;
+            $TeamUser->user_id = $user->id;
+            $TeamUser->save();
         }
 
         return redirect()->route('usuarios.index');
