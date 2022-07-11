@@ -51,4 +51,21 @@ class CreditConsulterController extends Controller
         ], 200);
 
     }
+
+    public function listCredits(Request $request) {
+        $user_id = auth()->user()->id; //capturamos el ID del usuario
+
+        $credits = Credit::where("user_id", $user_id)
+        ->leftJoin('users','users.id','=','user_id')
+        ->leftJoin('states','states.idState','=','idState_state')
+        ->select('consulted_credits.*','users.name as user','states.name as state')
+        ->get();
+
+        return response()->json([
+            "status" => 1,
+            "msg" => "Credits",
+            "data" => $credits
+        ]);
+    }
+
 }

@@ -21,7 +21,6 @@
                                     </button>
                                 </div>                                
                             @endif
-
                                 {{-- HTML - Collective--}}
                                 {!! Form::model($user, ['method'=>'PUT', 'route' => ['usuarios.update',$user->id] ] ) !!}
                                     <div class="row">
@@ -53,6 +52,21 @@
                                             <div class="form-group">
                                                 <label for="name">Roles</label>
                                                 {!! Form::select('roles[]', $roles,[], array('class'=>'form-control')) !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="name">Equipo</label>
+                                                <select class="form-control" multiple="multiple" name="teams[]" id="teams" style="height: auto;">
+                                                    @foreach($teams as $k => $team)   
+                                                        @if ($team->s)
+                                                            <option value="{{$team->id}}" selected="selected">{{$team->name}}</option> 
+                                                        @else                                                      
+                                                            <option value="{{$team->id}}">{{$team->name}}</option>                                               
+                                                        @endif  
+                                                    @endforeach
+                                                </select>
+
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12">

@@ -21,7 +21,7 @@
                                     </button>
                                 </div>                                
                             @endif
-
+                                
                                 {{-- HTML - Collective--}}
                                 {!! Form::open(array('route'=>'usuarios.store', 'method'=>'POST')) !!}
                                     <div class="row">
@@ -53,6 +53,19 @@
                                             <div class="form-group">
                                                 <label for="name">Roles</label>
                                                 {!! Form::select('roles[]', $roles,[], array('class'=>'form-control')) !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="name">Equipo</label>
+                                                {{-- {!! Form::select('teams[]', $teams,[], array('class'=>'form-control','multiple'=>'multiple','name'=>'teams["name"]')) !!}                                                 --}}
+
+                                                <select class="form-control" multiple="multiple" name="teams[]" id="teams" style="height: auto;">
+                                                    @foreach($teams as $k => $team)                                                    
+                                                            <option value="{{$team->id}}" >{{$team->name}}</option>                                                        
+                                                    @endforeach
+                                                </select>
+
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12">

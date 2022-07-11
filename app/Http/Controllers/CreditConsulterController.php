@@ -21,6 +21,12 @@ class CreditConsulterController extends Controller
         return view('credit-consulter.index', ['states' => $states]);
     }
 
+    public function creditos()
+    {
+        $creditos = Credit::paginate(5);
+        return view('creditos.index', compact('creditos'));   
+    }
+
     public function getCreditNumberInfo()
     {
         $client = new Client();
