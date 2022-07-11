@@ -30,19 +30,13 @@ class ScrapeCreditNumberNotification
      */
     public function handle(ScrapeCreditNumber $event)
     {
-
-        Log::info('scraping...');
         $client = new Client();
         $url = 'http://proveedoreco.infonavit.org.mx/proveedoresEcoWeb/';
 
         // Get method: doLogin from homepage form
         $crawler = $client->request('GET', $url);
         $method = $crawler->filter('form input')->attr('value'); // -> doLogin
-
         Log::info('method: ',['method' => $method]);
-
-        // $user = 'IERURC06';
-        // $pass = 'Tecate04';
 
         $test = $crawler->filter('form')->form([
             'method' => $method,
@@ -55,8 +49,6 @@ class ScrapeCreditNumberNotification
         Log::info('test: ',['crawler' => $crawler]);
 
         $method = $crawler->filter('input[name="method"]')->attr('value');
-        // $creditNumber = '1420208694'; -> has error
-        // $creditNumber = '0222036775';
 
         try {
             $form_credit_number = $crawler->filter('form')->form([
@@ -72,7 +64,6 @@ class ScrapeCreditNumberNotification
 
             return ['error' => $e];
         }
-
         Log::info('form_credit_number: ',['form_credit_number' => $form_credit_number]);
 
         $result = $client->submit($form_credit_number);
