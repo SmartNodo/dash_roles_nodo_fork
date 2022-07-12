@@ -136,6 +136,12 @@
             // 3. Si el crédito no tiene error: pinta el resultado
             const r = result.result
 
+            console.log(typeof result.result['isBroxel'])
+            console.log(result.result['isBroxel'] === 'false')
+
+            const balance =  result.result['costoEcoTec'];
+            let dollarUSLocale = Intl.NumberFormat('en-US');
+
             // Mostrar contenedor
             document.querySelector('.container-result').style.display = "block";
             // Vaciar el contenedor
@@ -160,11 +166,21 @@
                     </tr>
                     <tr>
                         <th>Balance</th>
-                        <td>$${result.result['costoEcoTec']}</td>
+                        <td>$${ dollarUSLocale.format(balance) }</td>
                     </tr>
-                    <tr>
+                    ${ /* <tr>
                         <th>Ahorro Minimo Requerido</th>
                         <td>$${result.result['ahorroEcoSalario']}</td>
+                    </tr> */'' }
+                    <tr>
+                        <th></th>
+                        <td>
+                            <h6>
+                                <span class="badge bg-info">
+                                    ${ result.result['isBroxel'] == 'false'? 'Casia': 'Broxel' }
+                                </span>
+                            </h6>
+                        </td>
                     </tr>
                     </tbody>
             </table>`

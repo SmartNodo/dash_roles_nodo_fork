@@ -22,8 +22,6 @@ class CreditConsulterController extends Controller
         // Ejecuta el scraper
         $result = event( new ScrapeCreditNumber($request->creditNumber, $access_key->user, $access_key->pass) );
 
-        // dd(isset($result[0]['error']) && $result[0]['error']);
-
         if(isset($result[0]['error']) && $result[0]['error']) {
             return $result[0];
         }
