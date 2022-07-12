@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\TeamUser;
+use App\Models\AccessKey;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\ScrapeCreditNumber;
 use App\Models\ConsultedCredit as Credit;
-use App\Models\AccessKey;
 
 class CreditConsulterController extends Controller
 {
@@ -54,12 +55,30 @@ class CreditConsulterController extends Controller
 
     public function listCredits(Request $request) {
         $user_id = auth()->user()->id; //capturamos el ID del usuario
+        $user_rols = auth()->user()->getRoleNames();
 
-        $credits = Credit::where("user_id", $user_id)
-        ->leftJoin('users','users.id','=','user_id')
-        ->leftJoin('states','states.idState','=','idState_state')
-        ->select('consulted_credits.*','users.name as user','states.name as state')
-        ->get();
+        if($user_rols->contains('Administrador')){
+            $credits = Credit::select('consulted_credits.*','users.name as user','states.name as state')
+            ->leftJoin('users','users.id','=','user_id')
+            ->leftJoin('states','states.idState','=','idState_state')                     
+            ->get();
+        }elseif($user_rols->contains('Manager')){
+            $credits = Credit::where("user_id", $user_id)
+            ->leftJoin('users','users.id','=','user_id')
+            ->leftJoin('states','states.idState','=','idState_state')
+            ->select('consulted_credits.*','users.name as user','states.name as state')
+            ->get();
+        }else{
+            $credits = Credit::where("user_id", $user_id)
+            ->leftJoin('users','users.id','=','user_id')
+            ->leftJoin('states','states.idState','=','idState_state')
+            ->select('consulted_credits.*','users.name as user','states.name as state')
+            ->get();
+        }
+
+        
+
+        
 
         return response()->json([
             "status" => 1,
