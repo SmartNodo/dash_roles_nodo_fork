@@ -64,7 +64,7 @@ class LoginController extends Controller
                 Session::put('bearer_token', $token);
 
                 $this->guard()->login($user, $request->has('remember'));    
-                return redirect()->route('home');
+                return redirect()->route('consulta');
        
             }else{
                 return redirect()->route('login'); 

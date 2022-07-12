@@ -18,6 +18,10 @@ use App\Http\Controllers\CreditConsulterController;
 |
 */
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
@@ -28,7 +32,8 @@ Route::group(['middleware' => ['auth']], function(){
     // Route::resource('blogs', BlogController::class);
 
     // Muestra vista de consultas de crédito
-    Route::get('/', [CreditConsulterController::class, 'index']);
+    Route::get('/consulta', [CreditConsulterController::class, 'index'])->name('consulta');
+    
 
     Route::get('creditos', [CreditConsulterController::class, 'creditos']);
 });

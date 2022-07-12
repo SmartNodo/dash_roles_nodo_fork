@@ -42,7 +42,8 @@
                                 </select>
                             </div>
                             <div class="form-row form-group justify-content-center">
-                                <button type="submit" class="text-center" id="btn-send-query" >Consultar</button>
+                                <button type="submit" class="text-center m-1" id="btn-send-query" >Consultar</button> 
+                                <button type="button" class="text-center m-1"  onclick="window.location.href='\creditos';">  Lista </button>                                                                
                             </div>
                         </div>
                         <div class="col" id="error">
