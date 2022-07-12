@@ -15,6 +15,7 @@ Route::group( ['middleware' => ["auth:sanctum"]], function(){
     //rutas
     Route::get('user-profile', [UserController::class, 'userProfile']);
     Route::get('logout', [UserController::class, 'logout']);
+    Route::post('user-update', [UserController::class, 'userUpdate']);
 
     //rutas para Queve
     Route::post('create-queve', [QueveController::class, 'createQueve']);

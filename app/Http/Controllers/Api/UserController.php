@@ -74,6 +74,47 @@ class UserController extends Controller
         ]); 
     }
 
+    public function userUpdate(Request $request)
+    {
+        
+        $user_id_login = auth()->user()->id;
+
+        $this->validate($request, [
+            'name' => 'required', 
+            'email'=>'required|email|unique:users,email,'.$request->idUser,
+            'password'=>'same:confirm-password',
+            'roles'=>'required',
+            'teams'=>'required'
+        ]);
+        
+        $input = $request->all();
+        if(!empty($input['password'])){
+            $input['password'] = Hash::make($input['password']);
+        }else{
+            $input = Arr::except($input, array('password'));
+        }
+
+        $user = User::find($id);
+        $user->update($input);
+        DB::table('model_has_roles')->where('model_id', $id)->delete();
+
+        $user->assignRole($request->input('roles'));
+        
+        TeamUser::where('user_id', $user->id)->delete();
+
+        foreach($request->teams as $k => $v){
+            $TeamUser = new TeamUser;
+            $TeamUser->team_id = $v;
+            $TeamUser->user_id = $user->id;
+            $TeamUser->save();
+        }
+
+        return response()->json([
+            "status" => 1,
+            "msg" => "Usuario actializado de Sesión",            
+        ]);
+    }
+
     public function logout() {
         auth()->user()->tokens()->delete();
         
