@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\TeamUser;
 use App\Models\AccessKey;
 use Illuminate\Http\Request;
@@ -70,6 +71,15 @@ class CreditConsulterController extends Controller
         // Obtenemos los usuarios relacionados a los equipos
         $idsUsers = TeamUser::whereIn('team_id',$idsTeams)->selectRaw('group_concat(user_id) as user_ids')->first(); 
         $idsUsers = explode(",", $idsUsers->user_ids);
+        // Obtenemos ids de rol sysadmin
+        $idsys = User::role('Sysadmin')->selectRaw('group_concat(id) as ids')->first();
+        $idsys = explode(",", $idsys->ids);
+        // Obtenemos ids de rol Admin
+        $idsad = User::role('Administrador')->selectRaw('group_concat(id) as ids')->first();
+        $idsad = explode(",", $idsad->ids); 
+        
+        
+        
         
         if($user_rols->contains('Sysadmin')){
             $credits = Credit::select('consulted_credits.*','users.name as user','states.name as state')
@@ -77,12 +87,16 @@ class CreditConsulterController extends Controller
             ->leftJoin('states','states.idState','=','idState_state')                     
             ->get();
         }elseif($user_rols->contains('Administrador')){
+            //  Elimina las concidencias en ambos arrays   
+            $idsUsers = array_diff($idsUsers, $idsys);
             $credits = Credit::whereIn("user_id", $idsUsers)
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
             ->get();
         }elseif($user_rols->contains('Manager')){
+            //  Elimina las concidencias en arrays
+            $idsUsers = array_diff($idsUsers, $idsys, $idsad);
             $credits = Credit::whereIn("user_id", $idsUsers)
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
