@@ -7,6 +7,7 @@ use App\Models\TeamUser;
 use App\Models\AccessKey;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\ScrapeCreditNumber;
@@ -54,14 +55,35 @@ class CreditConsulterController extends Controller
     public function listCredits(Request $request) {
         $user_id = auth()->user()->id; //capturamos el ID del usuario
         $user_rols = auth()->user()->getRoleNames();
+                     
+        // METODO 1
+        // $teams = TeamUser::where('user_id',$user_id)->get(); 
+        // $ateams = [];
+        // foreach($teams as $k => $v){            
+        //     array_push($ateams, $v->team_id);                   
+        // }
 
-        if($user_rols->contains('Administrador')){
+        // METODO 2
+        // Obtenemos los equipos relacionados al usuario logeando
+        $idsTeams = TeamUser::where('user_id',$user_id)->selectRaw('group_concat(team_id) as team_ids')->first();
+        $idsTeams = explode(",", $idsTeams->team_ids);
+        // Obtenemos los usuarios relacionados a los equipos
+        $idsUsers = TeamUser::whereIn('team_id',$idsTeams)->selectRaw('group_concat(user_id) as user_ids')->first(); 
+        $idsUsers = explode(",", $idsUsers->user_ids);
+        
+        if($user_rols->contains('Sysadmin')){
             $credits = Credit::select('consulted_credits.*','users.name as user','states.name as state')
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')                     
             ->get();
+        }elseif($user_rols->contains('Administrador')){
+            $credits = Credit::whereIn("user_id", $idsUsers)
+            ->leftJoin('users','users.id','=','user_id')
+            ->leftJoin('states','states.idState','=','idState_state')
+            ->select('consulted_credits.*','users.name as user','states.name as state')
+            ->get();
         }elseif($user_rols->contains('Manager')){
-            $credits = Credit::where("user_id", $user_id)
+            $credits = Credit::whereIn("user_id", $idsUsers)
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
@@ -72,11 +94,7 @@ class CreditConsulterController extends Controller
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
             ->get();
-        }
-
-        
-
-        
+        }        
 
         return response()->json([
             "status" => 1,
