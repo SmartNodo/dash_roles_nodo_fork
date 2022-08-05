@@ -19,7 +19,7 @@ class CreditConsulterController extends Controller
     public function checkCreditNumber(Request $request)
     {
         // 1.- Obtiene las llaves del estado solicitado:
-        $access_key = AccessKey::find($request->idState);
+        $access_key = AccessKey::where('idState_state', $request->idState)->first();
 
         // Ejecuta el scraper
         $result = event( new ScrapeCreditNumber($request->creditNumber, $access_key->user, $access_key->pass) );
