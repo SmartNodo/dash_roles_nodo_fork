@@ -16,6 +16,49 @@
 </head>
 <body>
     <div class="container">
+
+        <nav class="navbar navbar-expand-sm navbar-light" id="neubar">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    {{-- <img src="/static_files/images/logos/logo_2.png" height="60" /> --}}
+                    <h4></h4>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class=" collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ms-auto ">
+                        <li class="nav-item">
+                            <a class="nav-link mx-2 active" aria-current="page" href="{{route('credit-list')}}">Lista</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('logout') }}" class="dropdown-item has-icon"
+                            onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt"></i> Salir
+                            </a>
+                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
+                                {{ csrf_field() }}
+                            </form>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a class="nav-link mx-2" href="#">Pricing</a>
+                        </li> --}}
+                        {{-- <li class="nav-item dropdown">
+                            <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Company
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Blog</a></li>
+                            <li><a class="dropdown-item" href="#">About Us</a></li>
+                            <li><a class="dropdown-item" href="#">Contact us</a></li>
+                            </ul>
+                        </li> --}}
+                    </ul>
+                </div>
+            </div>
+          </nav>
+
+
         <div class="row align-items-center vh-100">
           <div class="col-6">
             <form action="" id="form-query">
@@ -42,8 +85,8 @@
                                 </select>
                             </div>
                             <div class="form-row form-group justify-content-center">
-                                <button type="submit" class="text-center m-1" id="btn-send-query" >Consultar</button> 
-                                <button type="button" class="text-center m-1"  onclick="window.location.href='\creditos';">  Lista </button>                                                                
+                                <button type="submit" class="text-center m-1" id="btn-send-query" >Consultar</button>
+                                {{-- <button type="button" class="text-center m-1"  onclick="window.location.href='\creditos';">  Lista </button> --}}
                             </div>
                         </div>
                         <div class="col" id="error">

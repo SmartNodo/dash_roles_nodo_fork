@@ -33,9 +33,8 @@ Route::group(['middleware' => ['auth']], function(){
 
     // Muestra vista de consultas de crédito
     Route::get('/consulta', [CreditConsulterController::class, 'index'])->name('consulta');
-    
 
-    Route::get('creditos', [CreditConsulterController::class, 'creditos']);
+    Route::get('creditos', [CreditConsulterController::class, 'creditos'])->name('credit-list');
 });
 
 
