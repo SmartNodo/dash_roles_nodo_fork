@@ -19,12 +19,12 @@ use App\Http\Controllers\CreditConsulterController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+Auth::routes(["register" => false]);
 
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('roles', RolController::class);
@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth']], function(){
     // Muestra vista de consultas de crédito
     Route::get('/consulta', [CreditConsulterController::class, 'index'])->name('consulta');
 
-    Route::get('creditos', [CreditConsulterController::class, 'creditos'])->name('credit-list');
+    Route::get('creditos', [CreditConsulterController::class, 'creditos'])->name('credit-list');    
 });
 
 

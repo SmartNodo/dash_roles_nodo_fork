@@ -17,15 +17,14 @@
     <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
 </head>
 
-<body>
+<body class="bodyLogin">
 <div id="app">
     <section class="section">
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
                     <div class="login-brand">
-                        <img src="{{ asset('img/logo.png') }}" alt="logo" width="100"
-                             class="shadow-light">
+                        <img src="{{ asset('img/avatar_blanco.png') }}" style="width: 60%;margin-top: 10%;" alt="logo" width="100">
                     </div>
                     @yield('content')
                     <div class="simple-footer">
