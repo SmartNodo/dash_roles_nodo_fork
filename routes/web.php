@@ -27,14 +27,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes(["register" => false]);
 
 Route::group(['middleware' => ['auth']], function(){
-    Route::resource('roles', RolController::class);
-    Route::resource('usuarios', UsuarioController::class);
+    // Route::resource('roles', RolController::class);
+    // Route::resource('usuarios', UsuarioController::class);
     // Route::resource('blogs', BlogController::class);
 
     // Muestra vista de consultas de crédito
     Route::get('/consulta', [CreditConsulterController::class, 'index'])->name('consulta');
 
     Route::get('creditos', [CreditConsulterController::class, 'creditos'])->name('credit-list');    
+});
+
+Route::group(['middleware' => ['role:Sysadmin']], function () {
+    Route::resource('roles', RolController::class);
+    Route::resource('usuarios', UsuarioController::class);
 });
 
 

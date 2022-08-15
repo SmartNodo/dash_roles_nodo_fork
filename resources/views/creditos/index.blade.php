@@ -39,12 +39,12 @@
 
 <script>
     let _token = `{{ Session::get('bearer_token') }}`;
+    let url = document.location.origin+'/api/list-credits';
     document.addEventListener('DOMContentLoaded', function () {
         lista();
     }, false);
-
     async function lista(){      
-        const res = await fetch('http://127.0.0.1:8000/api/list-credits', {
+        const res = await fetch(url, {
             method:'GET',
             headers:{
                 'Accept': 'application/json',
