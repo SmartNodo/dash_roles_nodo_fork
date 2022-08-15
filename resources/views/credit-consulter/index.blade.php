@@ -9,15 +9,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script> --}}
 
     <link rel="stylesheet" href="css/styles.css">
 
 </head>
 <body>
-    <div class="container">
+    <figure class="container">
 
-        <nav class="navbar navbar-expand-sm navbar-light" id="neubar">
+        <nav class="navbar navbar-expand-sm navbar-light mb-5 mb-0" id="neubar">
             <div class="container">
                 <a class="navbar-brand" href="#">
                     {{-- <img src="/static_files/images/logos/logo_2.png" height="60" /> --}}
@@ -32,7 +32,7 @@
                             <a class="nav-link mx-2 active" aria-current="page" href="{{route('credit-list')}}">Lista</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('logout') }}" class="dropdown-item has-icon"
+                            <a href="{{ url('logout') }}" class="nav-link mx-2 active"
                             onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt"></i> Salir
                             </a>
@@ -56,11 +56,11 @@
                     </ul>
                 </div>
             </div>
-          </nav>
+        </nav>
 
 
         <div class="row align-items-center vh-100">
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <form action="" id="form-query">
                 <!-- SECTION 1 -->
                 <h4></h4>
@@ -71,11 +71,11 @@
                         {{-- <a href="#" class="avartar">
                             <img src="images/avartar.png" alt="">
                         </a> --}}
-                        <div class="form-row form-group">
+                        <div class="form-group">
                             <div class="form-holder">
                                 <input type="text" class="form-control" name="credit_number" id="credit-number" placeholder="Número de crédito">
                             </div>
-                            <div class="form-holder">
+                            <div class="form-holder mt-4">
                                 {{-- <input type="text" class="form-control" placeholder="Last Name"> --}}
                                 <select name="id_state" class="form-control" id="id-state">
                                     <option value="">Seleccionar estado</option>
@@ -84,12 +84,12 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-row form-group justify-content-center">
+                            <div class="form-group justify-content-center mt-4">
                                 <button type="submit" class="text-center m-1" id="btn-send-query" >Consultar</button>
                                 {{-- <button type="button" class="text-center m-1"  onclick="window.location.href='\creditos';">  Lista </button> --}}
                             </div>
                         </div>
-                        <div class="col" id="error">
+                        <div class="col mt-4" id="error">
                             <div class="alert alert-danger" role="alert">
                             </div>
                         </div>
@@ -98,9 +98,9 @@
             </form>
           </div>
 
-          <div class="col-6 container-result">
+          <div class="col-12 col-md-6 container-result mt-2">
             <section>
-                <div class="inner">
+                <div class="inner pt-xm-0">
                     <h2 class="text-center py-4">Datos del Acreditado</h2>
                     <div id="result">
                     </div>
@@ -108,7 +108,7 @@
             </section>
           </div>
         </div>
-    </div>
+    </figure>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>

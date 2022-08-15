@@ -10,6 +10,7 @@ body {
   font-family: "Poppins-Regular";
   font-size: 13px;
   margin: 0;
+  background-color: #6C918A;
   background: url("/img/form-wizard-bg.jpg") center bottom;
   background-size: cover;
 }
@@ -300,7 +301,7 @@ button:hover {
 }
 @media (max-width: 767px) {
   body {
-    background: none;
+    background: #6C918A;
   }
   .wizard {
     width: auto;
@@ -325,7 +326,15 @@ button:hover {
     width: auto;
     transform: translateX(0);
   }
+  .vh-100 {
+    height: auto !important;
+  }
 }
+#neubar {
+  background: rgba(108, 145, 138, 0.8);
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.4);
+}
+
 .nav-item .active {
   border-radius: 6px;
 }

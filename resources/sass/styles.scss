@@ -12,6 +12,7 @@ body {
 	font-family: "Poppins-Regular";
 	font-size: 13px;
 	margin: 0;
+	background-color: #6C918A;
 	background: url('/img/form-wizard-bg.jpg') center bottom;
 	background-size: cover;
 }
@@ -333,7 +334,9 @@ button {
 
 @media (max-width: 767px) {
 	body {
-		background: none;
+		// background: url('/img/form-wizard-bg.jpg');
+		// background-size: cover;
+		background: #6C918A;
 	}
 	.wizard {
 		width: auto;
@@ -358,12 +361,16 @@ button {
 		width: auto;
 		transform: translateX(0);
 	}
+	.vh-100 {
+		height: auto !important;
+	}
 }
 // Navbar:
 
 #neubar {
-	// background: #fae8d2;
-	// box-shadow: 4px 6px 12px rgba(0,0,0,0.4)
+	// background: #6C918A;
+	background: rgb(108,145,138, .8);
+	box-shadow: 4px 6px 12px rgba(0,0,0,0.4);
   }
 
   .nav-item .active {
@@ -373,7 +380,7 @@ button {
 	// 			 -4px -4px 8px #f7e5cc;
   }
   #neubar .dropdown-menu a:hover {
-	color: #454545
+	color: #454545;
   }
   #neubar .nav-item {
 	margin : auto 4px;
