@@ -85,7 +85,7 @@
                                 </select>
                             </div>
                             <div class="form-group justify-content-center mt-4">
-                                <button type="submit" class="text-center m-1" id="btn-send-query" >Consultar</button>
+                                <button type="submit" class="text-center m-1 m-auto" id="btn-send-query" >Consultar</button>
                                 {{-- <button type="button" class="text-center m-1"  onclick="window.location.href='\creditos';">  Lista </button> --}}
                             </div>
                         </div>
@@ -96,6 +96,14 @@
                     </div>
                 </section>
             </form>
+          </div>
+
+          <div class="col-12 col-md-6 container-spiner mt-2">
+            <section>
+                <div class="inner pt-xm-0">
+                    <div class="spinner m-auto"></div>
+                </div>
+            </section>
           </div>
 
           <div class="col-12 col-md-6 container-result mt-2">
@@ -120,6 +128,9 @@
         document.getElementById('btn-send-query').addEventListener('click', (event) => {
             event.preventDefault()
 
+            // Mostrar contenedor
+            document.querySelector('.container-spiner').style.display = "block";
+
             idState = document.forms["form-query"].id_state.value;
             creditNumber = document.forms["form-query"].credit_number.value;
 
@@ -130,11 +141,6 @@
             }
 
             saveQuery(data)
-
-            // 2.- Ejecutar Scraper
-            // 3.- Actualizar consulta
-
-            // const endpoint = "save-query"
 
 
         })
@@ -180,54 +186,56 @@
             // 3. Si el crédito no tiene error: pinta el resultado
             const r = result.result
 
-            console.log(typeof result.result['isBroxel'])
-            console.log(result.result['isBroxel'] === 'false')
+            const balance =  result.result['costoEcoTec']
+            let dollarUSLocale = Intl.NumberFormat('en-US')
 
-            const balance =  result.result['costoEcoTec'];
-            let dollarUSLocale = Intl.NumberFormat('en-US');
+            // Ocultar Spiner:
+            document.querySelector('.container-spiner').style.display = "none"
 
-            // Mostrar contenedor
-            document.querySelector('.container-result').style.display = "block";
+            // Mostrar contenedor de resultado:
+            document.querySelector('.container-result').style.display = "block"
+
             // Vaciar el contenedor
             resultContainer.innerHTML = `
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th scope="row">Nombre Acreditado</th>
-                        <td> ${result.result['nombreDH']} </td>
-                    </tr>
-                    <tr>
-                        <th>NSS</th>
-                        <td>${result.result['nss']}</td>
-                    </tr>
-                    <tr>
-                        <th>Dirección Vivienda</th>
-                        <td>${result.result['domicilio']}</td>
-                    </tr>
-                    <tr>
-                        <th>Código postal</th>
-                        <td> ${result.result['codigoPostal']}</td>
-                    </tr>
-                    <tr>
-                        <th>Balance</th>
-                        <td>$${ dollarUSLocale.format(balance) }</td>
-                    </tr>
-                    ${ /* <tr>
-                        <th>Ahorro Minimo Requerido</th>
-                        <td>$${result.result['ahorroEcoSalario']}</td>
-                    </tr> */'' }
-                    <tr>
-                        <th></th>
-                        <td>
-                            <h6>
-                                <span class="badge bg-info">
-                                    ${ result.result['isBroxel'] == 'false'? 'Casia': 'Broxel' }
-                                </span>
-                            </h6>
-                        </td>
-                    </tr>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Nombre Acreditado</th>
+                            <td> ${result.result['nombreDH']} </td>
+                        </tr>
+                        <tr>
+                            <th>NSS</th>
+                            <td>${result.result['nss']}</td>
+                        </tr>
+                        <tr>
+                            <th>Dirección Vivienda</th>
+                            <td>${result.result['domicilio']}</td>
+                        </tr>
+                        <tr>
+                            <th>Código postal</th>
+                            <td> ${result.result['codigoPostal']}</td>
+                        </tr>
+                        <tr>
+                            <th>Balance</th>
+                            <td>$${ dollarUSLocale.format(balance) }</td>
+                        </tr>
+                        ${ /* <tr>
+                            <th>Ahorro Minimo Requerido</th>
+                            <td>$${result.result['ahorroEcoSalario']}</td>
+                        </tr> */'' }
+                        <tr>
+                            <th></th>
+                            <td>
+                                <h6>
+                                    <span class="badge bg-info">
+                                        ${ result.result['isBroxel'] == 'false'? 'Casia': 'Broxel' }
+                                    </span>
+                                </h6>
+                            </td>
+                        </tr>
                     </tbody>
-            </table>`
+                </table>
+                `
         }
 
     </script>
