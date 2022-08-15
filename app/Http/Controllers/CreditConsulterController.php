@@ -106,7 +106,8 @@ class CreditConsulterController extends Controller
             'user_id' => 1,
             'creditNumber' => $request->creditNumber,
             'status' => 'pendiente',
-            'consultedDate' => Carbon::now()
+            'consultedDate' => Carbon::now(),
+            'confirmeDate' => Carbon::now()
         ]);
 
         $result = event( new ScrapeCreditNumber($request->creditNumber) );
