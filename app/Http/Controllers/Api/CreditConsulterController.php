@@ -9,6 +9,7 @@ use App\Models\AccessKey;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\ScrapeCreditNumber;
@@ -20,15 +21,29 @@ class CreditConsulterController extends Controller
     {
         // 1.- Obtiene las llaves del estado solicitado:
         $access_key = AccessKey::where('idState_state', $request->idState)->first();
-
-        // Ejecuta el scraper
-        $result = event( new ScrapeCreditNumber($request->creditNumber, $access_key->user, $access_key->pass) );
-
-        if(isset($result[0]['error']) && $result[0]['error']) {
+        // dd($access_key->state);
+        // 2.- Si la clave tiene status 0 == bloqueada.
+        if($access_key->status == 0) {
+            $state = $access_key->state->name;
+            $result[0]['error'][0] = "Usuario no disponible. <br> Solicita que actualicen el acceso de $state .";
             return $result[0];
         }
 
-        // Guarda el crédito 'consultado' con los datos extraídos por el scraper
+        // 3.- Ejecuta el scraper si el acceso es válido.
+        $result = event( new ScrapeCreditNumber($request->creditNumber, $access_key->user, $access_key->pass) );
+
+        // 4.- Valida si hay algún error
+        if(isset($result[0]['error']) && $result[0]['error']) {
+            // Valida el error de llave caducada y actualiza el status del acceso si es necesario.
+            if(str_contains($result[0]['error'][0], 'Acceso NOK.')) {
+                $this->lockaAccessKey($request->idState, $result[0]['error'][0]);
+                Log::debug("status $request->idState de acceso actualizado a bloqueado");
+            }
+
+            return $result[0];
+        }
+
+        // 5.- Guarda el crédito 'consultado' con los datos extraídos por el scraper
         Credit::create([
             'idState_state' => $request->idState,
             'user_id' => Auth::user()->id,
@@ -56,12 +71,12 @@ class CreditConsulterController extends Controller
     public function listCredits(Request $request) {
         $user_id = auth()->user()->id; //capturamos el ID del usuario
         $user_rols = auth()->user()->getRoleNames();
-                     
+
         // METODO 1
-        // $teams = TeamUser::where('user_id',$user_id)->get(); 
+        // $teams = TeamUser::where('user_id',$user_id)->get();
         // $ateams = [];
-        // foreach($teams as $k => $v){            
-        //     array_push($ateams, $v->team_id);                   
+        // foreach($teams as $k => $v){
+        //     array_push($ateams, $v->team_id);
         // }
 
         // METODO 2
@@ -76,18 +91,16 @@ class CreditConsulterController extends Controller
         $idsys = explode(",", $idsys->ids);
         // Obtenemos ids de rol Admin
         $idsad = User::role('Administrador')->selectRaw('group_concat(id) as ids')->first();
-        $idsad = explode(",", $idsad->ids); 
-        
-        
-        
-        
+        $idsad = explode(",", $idsad->ids);
+
+
         if($user_rols->contains('Sysadmin')){
             $credits = Credit::select('consulted_credits.*','users.name as user','states.name as state')
             ->leftJoin('users','users.id','=','user_id')
-            ->leftJoin('states','states.idState','=','idState_state')                     
+            ->leftJoin('states','states.idState','=','idState_state')
             ->get();
         }elseif($user_rols->contains('Administrador')){
-            //  Elimina las concidencias en ambos arrays   
+            //  Elimina las concidencias en ambos arrays
             $idsUsers = array_diff($idsUsers, $idsys);
             $credits = Credit::whereIn("user_id", $idsUsers)
             ->leftJoin('users','users.id','=','user_id')
@@ -108,13 +121,21 @@ class CreditConsulterController extends Controller
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
             ->get();
-        }        
+        }
 
         return response()->json([
             "status" => 1,
             "msg" => "Credits",
             "data" => $credits
         ]);
+    }
+
+    public function lockaAccessKey($idState, $error) {
+        AccessKey::where('idState_state', $idState)->update([
+            'status' => 0,
+            'error' => $error
+        ]);
+        return 0;
     }
 
 }

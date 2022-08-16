@@ -175,6 +175,8 @@
 
             // 2. Si el crédito tiene error
             if(result.error) {
+                // Ocultar Spiner:
+                hideSpiner()
                 // Vaciar el contenedor
                 errorContainer.innerHTML = `<div class="alert alert-danger" role="alert"> ${result.error} </div>`
                 errorContainer.style.display = "block"
@@ -190,7 +192,7 @@
             let dollarUSLocale = Intl.NumberFormat('en-US')
 
             // Ocultar Spiner:
-            document.querySelector('.container-spiner').style.display = "none"
+            hideSpiner()
 
             // Mostrar contenedor de resultado:
             document.querySelector('.container-result').style.display = "block"
@@ -236,6 +238,11 @@
                     </tbody>
                 </table>
                 `
+        }
+
+       function hideSpiner() {
+            // Ocultar Spiner:
+            document.querySelector('.container-spiner').style.display = "none"
         }
 
     </script>

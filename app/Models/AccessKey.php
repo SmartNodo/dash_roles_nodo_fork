@@ -15,4 +15,8 @@ class AccessKey extends Model
         'pass',
         'error'
     ];
+
+    public function state() {
+        return $this->belongsTo('App\Models\State', 'idState_state', 'idState');
+    }
 }

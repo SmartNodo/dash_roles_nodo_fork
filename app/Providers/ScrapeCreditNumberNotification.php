@@ -30,24 +30,33 @@ class ScrapeCreditNumberNotification
      */
     public function handle(ScrapeCreditNumber $event)
     {
+        // ****** Formulario Login: ******
         $client = new Client();
         $url = 'http://proveedoreco.infonavit.org.mx/proveedoresEcoWeb/';
 
         // Get method: doLogin from homepage form
         $crawler = $client->request('GET', $url);
         $method = $crawler->filter('form input')->attr('value'); // -> doLogin
-        Log::info('method: ',['method' => $method]);
 
-        $test = $crawler->filter('form')->form([
+
+        $qry_form = $crawler->filter('form')->form([
             'method' => $method,
             'usuario' => $event->user,
             'password' => $event->pass,
         ]);
-        Log::info('test: ',['test' => $test]); // -> doLogin
 
-        $crawler = $client->submit($test);
-        Log::info('test: ',['crawler' => $crawler]);
+        $crawler = $client->submit($qry_form);
+        $error = $crawler->filter('.system_title')->each(function ($node) {
+            return $node->text();
+        });
 
+        if($error) {
+            return ['error' => $error];
+        }
+
+        /* ------------------------------------------------------ */
+
+        // ****** Formulario de Consulta: ******
         $method = $crawler->filter('input[name="method"]')->attr('value');
 
         try {
@@ -55,7 +64,11 @@ class ScrapeCreditNumberNotification
                 'method' => $method,
                 'numeroCredito' => $event->creditNumber,
             ]);
+
+            // Log::info('1.- form_credit_number: ',['form_credit_number' => $form_credit_number]);
+
         } catch (\Throwable $th) {
+
             if( $th->getMessage() == 'Unreachable field "numeroCredito".' ) {
                 $e = 'Es probable que el número de crédito no corresponda al estado seleccionado';
             } else {
@@ -64,14 +77,16 @@ class ScrapeCreditNumberNotification
 
             return ['error' => $e];
         }
-        Log::info('form_credit_number: ',['form_credit_number' => $form_credit_number]);
+
+        // Log::info('2.- form_credit_number: ',['form_credit_number' => $form_credit_number]);
 
         $result = $client->submit($form_credit_number);
 
         $error = $result->filter('.system_title')->each(function ($node) {
             return $node->text();
         });
-        Log::info('error: ', ['error' => $error]);
+
+        // Log::info('3.- error: ', ['error' => $error]);
 
 
         if(!$error) {
