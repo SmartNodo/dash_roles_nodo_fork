@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\QueveController;
 use App\Http\Controllers\Api\CreditConsulterController;
+use App\Http\Controllers\Api\AccessKeyController;
 
 
 Route::post('register', [UserController::class, 'register']);
@@ -28,6 +29,9 @@ Route::group( ['middleware' => ["auth:sanctum"]], function(){
     // Ruta para guardar crédito en la BD
     Route::post('check-credit-number', [CreditConsulterController::class, 'checkCreditNumber']);
     Route::get("list-credits", [CreditConsulterController::class, "listCredits"]);
+
+    // CRUD llaves de acceso
+    Route::get('access-keys', [AccessKeyController::class, 'index'])->name('access-keys');
 
 });
 

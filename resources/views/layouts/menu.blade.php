@@ -13,4 +13,7 @@
     <a class="nav-link" href="/creditos">
         <i class=" fas fa-blog"></i><span>Créditos</span>
     </a>
+    <a class="nav-link" href="/llaves">
+        <i class=" fas fa-key"></i><span>Llaves de acceso</span>
+    </a>
 </li>

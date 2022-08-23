@@ -44,6 +44,8 @@
     </div>
 </div>
 
+@yield('modals')
+
 @include('profile.change_password')
 @include('profile.edit_profile')
 

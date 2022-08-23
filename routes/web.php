@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CreditConsulterController;
+use App\Http\Controllers\AccessKeyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,9 +33,10 @@ Route::group(['middleware' => ['auth']], function(){
     // Route::resource('blogs', BlogController::class);
 
     // Muestra vista de consultas de crédito
-    Route::get('/consulta', [CreditConsulterController::class, 'index'])->name('consulta');
+    Route::get('consulta', [CreditConsulterController::class, 'index'])->name('consulta');
 
-    Route::get('creditos', [CreditConsulterController::class, 'creditos'])->name('credit-list');    
+    Route::get('creditos', [CreditConsulterController::class, 'creditos'])->name('credit-list');
+    Route::get('llaves', [AccessKeyController::class, 'index'])->name('access-keys');
 });
 
 Route::group(['middleware' => ['role:Sysadmin']], function () {
