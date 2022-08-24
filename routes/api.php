@@ -32,6 +32,7 @@ Route::group( ['middleware' => ["auth:sanctum"]], function(){
 
     // CRUD llaves de acceso
     Route::get('access-keys', [AccessKeyController::class, 'index'])->name('access-keys');
+    Route::post('access-keys/{accessKey}/update', [AccessKeyController::class, 'update'])->name('access-keys.update');
 
 });
 

@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Models\AccessKey;
+// use App\Models\AccessKey;
+use App\Models\State;
 use Session;
 
 class AccessKeyController extends Controller
 {
  
-    public function __construct(AccessKey $accessKey)
-    {
-        $this->accessKey = $accessKey;
-    }
+    // public function __construct(AccessKey $accessKey)
+    // {
+    //     $this->accessKey = $accessKey;
+    // }
 
     public function index()
     {
@@ -36,6 +37,8 @@ class AccessKeyController extends Controller
 
         // return view('access_keys.index', compact('responseBody'));
 
-        return view('access-keys.index');
+        $states = State::all();
+
+        return view('access-keys.index', ['states' => $states]);
     }
 }

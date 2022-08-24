@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @section('content')
     <section class="section">
         <div class="section-header">
@@ -14,12 +18,14 @@
                             <table class="table table-triped mt-2">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">State</th>
-                                        <th scope="col">User</th>
-                                        <th scope="col">Password</th>
-                                        <th scope="col">Acciones</th>
+                                        <th scope="col" class="text-center">Estado</th>
+                                        <th scope="col" class="text-center">User</th>
+                                        <th scope="col" class="text-center">Password</th>
+                                        <th scope="col" class="text-center">
+                                            Última actualización <br>
+                                            Día/Mes/Año
+                                        </th>
+                                        <th scope="col" class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody"></tbody>
@@ -34,7 +40,7 @@
 @endsection
 
 @section('modals')
-<div class="modal fade" tabindex="-1" role="dialog" id="updateModal">
+<div class="modal fade" tabindex="-1" role="dialog" id="update-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -43,100 +49,57 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id" class="form-control" id="id">
+                    <div class="form-group">
+                        <label for="id-state">Estado</label>
+                        <select name="idState_state" class="form-control" id="id-state" required>
+                            <option value="">-- Selecciona Estado --</option>
+                            @foreach ($states as $state)
+                                <option value="{{$state->idState}}">{{$state->name}}</option>
+                            @endforeach
+                        </select>
+                        {{-- <small id="emailHelp" class="form-text text-muted"></small> --}}
+                    </div>
+                    <div class="form-group">
+                        <label for="user">Usuario</label>
+                        <input type="text" name="user" id="user" class="form-control" id="user" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">Password</label>
+                        <input type="text" name="pass" class="form-control" id="pass" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 @endsection
 
+
+@section('scripts')
+{{-- Script variable global _token --}}
+<script>
+    // Global variable
+    var _token = `{{ Session::get('bearer_token') }}`;
+    console.log(_token)
+</script>
+
+{{-- Script encargado de realizar las acciones del CRUD --}}
+<script src="{{ asset('js/access_keys/index.js') }}"></script>
+
+{{-- Script que agrega eventos para realizar las acciones del CRUD --}}
 <script>
 
-    let _token = `{{ Session::get('bearer_token') }}`;
-    let endpoint = document.location.origin+'/api/access-keys';
+    document.addEventListener('DOMContentLoaded', ApiListAccessKeys(), false);
 
-    document.addEventListener('DOMContentLoaded', function () {
-        ApiListAccessKeys(_token, endpoint);
-    }, false);
+    document.addEventListener("submit", sendUpdateForm, false);
 
-    const ApiListAccessKeys = async (_token, endpoint) => {
-    // bloquea el código hasta que obtenga una respuesta:
-    const response = await fetch(endpoint, {
-        method:'GET',
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+_token,
-        },
-    })
-
-    const result = await response.json()
-    console.log(result)
-
-
-    let tbody = document.getElementById('tbody')
-    tbody.innerHTML = ""
-
-    let tr = ''
-
-    result.data.forEach(accessKey => {
-
-        if(accessKey.status == 0) {
-            tr += `<tr class="bg-danger text-white">`
-        } else {
-            tr += `<tr>`
-        }
-
-        tr += `
-                <td>${ accessKey.state.name }</td>
-                <td>${ accessKey.status }</td>
-                <td>${ accessKey.user }</td>
-                <td>${ accessKey.pass }</td>
-                <td>${ accessKey.updated_at }</td>
-                <td>
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal">
-                        Actualizar
-                    </button>
-                </td>
-            </tr>`
-        });
-
-    tbody.innerHTML = tr
-
-}
-
-    // async function lista(){      
-    //     const res = await fetch(endpoint, {
-    //         method:'GET',
-    //         headers:{
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'Authorization': 'Bearer '+_token,
-    //         },   
-    //     });      
-    //     const data = await res.json()                       
-    //     $("#tbody").empty()
-    //     let tr = '';
-    //     console.log(data)
-    //     data.data.forEach(data2 => {
-    //         console.log(data2);
-    //         tr += `<tr>
-    //                     <td>`+data2.id+`</td>
-    //                     <td>`+data2.user+`</td>
-    //                     <td>`+data2.state+`</td>
-    //                     <td>`+data2.nss+`</td>
-    //                     <td>`+data2.creditNumber+`</td>                        
-    //                     <td>`+data2.status+`</td>
-    //                     <td>`+data2.balance+`</td>
-    //                     <td>`+data2.email+`</td>
-    //                     <td>`+data2.updated_at+`</td>`
-    //     });
-    //     $("#tbody").append(tr);     
-    // }  
 </script>
+@endsection
 
