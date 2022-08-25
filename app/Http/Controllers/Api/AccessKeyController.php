@@ -16,7 +16,7 @@ class AccessKeyController extends Controller
 
     public function index()
     {
-        $keys = $this->accessKey->orderBy('status', 'ASC')->with('state')->get();
+        $keys = $this->accessKey->orderBy('idState_state', 'ASC')->with('state')->get();
 
         return response()->json([
             "status" => 0,
@@ -38,6 +38,20 @@ class AccessKeyController extends Controller
         return response()->json([
             "error" => false,
             "msg" => "Llave de acceso actualizada correctamente",
+            "data" => $key
+        ]);
+    }
+
+    public function disable(Request $request, $accessKey)
+    {
+        $key = $this->accessKey->find($accessKey);
+        $key->status = 2; // disable
+        $key->error = 'LLave desactivada';
+        $key->save();
+
+        return response()->json([
+            "error" => false,
+            "msg" => "Llave de acceso desactivada correctamente",
             "data" => $key
         ]);
     }
