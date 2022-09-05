@@ -20,6 +20,8 @@ const ApiListAccessKeys = async () => {
 
     result.data.forEach(accessKey => {
 
+        console.log(accessKey)
+
         if(accessKey.status == 0) {
             tr += `<tr class="bg-danger text-white text-center">`
         } else if(accessKey.status == 2) {
@@ -56,9 +58,10 @@ const ApiListAccessKeys = async () => {
                     </button>
                 </td>
             </tr>`
-    });
 
-    tbody.innerHTML = tr
+            tbody.innerHTML = tr
+
+    });
 }
 
 const ApiUpdateAccessKey = async () => {
@@ -89,6 +92,18 @@ const ApiUpdateAccessKey = async () => {
     const result = await response.json()
 
     location.reload();
+}
+
+function loadDataToupdateModal(e, el) {
+    e = e || window.event;
+
+    let accessKey = JSON.parse(decodeURIComponent( el.dataset.item ))
+
+    document.querySelector('#update-modal form select[id=id-state]').value = accessKey.idState_state
+    document.querySelector('#update-modal form input[id=user]').value = accessKey.user
+    document.querySelector('#update-modal form input[id=pass]').value = accessKey.pass
+    document.querySelector('#update-modal form input[id=id]').value = accessKey.id
+
 }
 
 const chageAccessKeyToDisable = async (e, el) => {
