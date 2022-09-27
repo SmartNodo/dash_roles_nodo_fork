@@ -14,10 +14,16 @@ use Illuminate\Support\Facades\DB;
 
 class CreditConsulterController extends Controller
 {
+
+    public function __construct(State $states)
+    {
+        $this->states = $states;
+    }
+
     public function index()
     {
-        $states = State::all();
-        // dd($states);
+        $states = $this->states->getActiveStates();
+
         return view('credit-consulter.index', ['states' => $states]);
     }
 
