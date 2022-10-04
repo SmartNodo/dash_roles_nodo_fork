@@ -6,7 +6,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\QueveController;
 use App\Http\Controllers\Api\CreditConsulterController;
+
 use App\Http\Controllers\Api\AccessKeyController;
+
+use App\Http\Controllers\Api\CheckBalanceController;
+
 
 
 Route::post('register', [UserController::class, 'register']);
@@ -36,6 +40,9 @@ Route::group( ['middleware' => ["auth:sanctum"]], function(){
     Route::post('access-keys/{accessKey}/disable', [AccessKeyController::class, 'disable'])->name('access-keys.disable');
 
 });
+
+
+Route::get('check-balance/{idState}/{creditNumber}', [CheckBalanceController::class, 'checkBalance']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
