@@ -73,11 +73,11 @@
                         </a> --}}
                         <div class="form-group">
                             <div class="form-holder">
-                                <input type="text" class="form-control" name="credit_number" id="credit-number" placeholder="Número de crédito">
+                                <input type="text" class="form-control" name="credit_number" id="credit-number" placeholder="Número de crédito" required>
                             </div>
                             <div class="form-holder mt-4">
                                 {{-- <input type="text" class="form-control" placeholder="Last Name"> --}}
-                                <select name="id_state" class="form-control" id="id-state">
+                                <select name="id_state" class="form-control" id="id-state" required>
                                     <option value="">Seleccionar estado</option>
                                     @foreach ($states as $state)
                                         <option value="{{$state->idState}}">{{$state->name}}</option>
@@ -128,11 +128,18 @@
         document.getElementById('btn-send-query').addEventListener('click', (event) => {
             event.preventDefault()
 
-            // Mostrar contenedor
-            document.querySelector('.container-spiner').style.display = "block";
+
 
             idState = document.forms["form-query"].id_state.value;
             creditNumber = document.forms["form-query"].credit_number.value;
+
+            // Validación:
+            if(!idState || !creditNumber) {
+                return 0
+            }
+
+            // Mostrar contenedor
+            document.querySelector('.container-spiner').style.display = "block";
 
             // 1.- Guardar consulta
             const data = {
@@ -141,7 +148,6 @@
             }
 
             saveQuery(data)
-
 
         })
 
