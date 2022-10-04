@@ -100,7 +100,7 @@ class ScrapeCreditNumberNotification
                 'domicilio' => $result->filter('input[name="domicilio"]')->attr('value'),
                 'codigoPostal' => $result->filter('input[name="codigoPostal"]')->attr('value'),
                 'costoEcoTec' => $result->filter('input[name="costoEcoTec"]')->attr('value'),
-                'ahorroEcoSalario' => $result->filter('input[name="ahorroEcoSalario"]')->attr('value'),
+                'ahorroEcoSalario' => $result->filter('input[name="ahorroEcoSalario"]')->attr('value')? $result->filter('input[name="ahorroEcoSalario"]')->attr('value'): '',
                 'numAvaluo' => $result->filter('input[name="numAvaluo"]')->attr('value'),
                 'usuarioSimulado' => $result->filter('input[name="usuarioSimulado"]')->attr('value'),
                 'estadoMunicipio' => $result->filter('input[name="estadoMunicipio"]')->attr('value'),
