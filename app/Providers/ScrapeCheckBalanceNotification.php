@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Providers\ScrapeCreditNumber;
+use App\Providers\ScrapeCheckBalance;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 // --
@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Goutte\Client;
 use Illuminate\Support\Facades\Log;
 
-class ScrapeCreditNumberNotification
+class ScrapeCheckBalanceNotification
 {
     /**
      * Create the event listener.
@@ -25,10 +25,10 @@ class ScrapeCreditNumberNotification
     /**
      * Handle the event.
      *
-     * @param  \App\Providers\ScrapeCreditNumber  $event
+     * @param  \App\Providers\ScrapeCheckBalance  $event
      * @return void
      */
-    public function handle(ScrapeCreditNumber $event)
+    public function handle(ScrapeCheckBalance $event)
     {
         // ****** Formulario Login: ******
         $client = new Client();
@@ -94,23 +94,10 @@ class ScrapeCreditNumberNotification
                 'success' => true,
                 'status' => 'consultado',
                 'message' => 'Crédito consultado correctamente!',
-                'estado' => $result->filter('input[name="estado"]')->attr('value'),
-                'nombreDH' => $result->filter('input[name="nombreDH"]')->attr('value'),
-                'nss' => $result->filter('input[name="nss"]')->attr('value'),
-                'domicilio' => $result->filter('input[name="domicilio"]')->attr('value'),
-                'codigoPostal' => $result->filter('input[name="codigoPostal"]')->attr('value'),
                 'costoEcoTec' => $result->filter('input[name="costoEcoTec"]')->attr('value'),
-                'ahorroEcoSalario' => $result->filter('input[name="ahorroEcoSalario"]')->attr('value'),
-                'numAvaluo' => $result->filter('input[name="numAvaluo"]')->attr('value'),
-                'usuarioSimulado' => $result->filter('input[name="usuarioSimulado"]')->attr('value'),
-                'estadoMunicipio' => $result->filter('input[name="estadoMunicipio"]')->attr('value'),
-                'marcaVista' => $result->filter('input[name="marcaVista"]')->attr('value'),
-                'isBroxel' => $result->filter('input[name="isBroxel"]')->attr('value'),
-                'creditNumber' => $event->creditNumber
             ];
         }
 
         return ['error' => $error];
-
     }
 }

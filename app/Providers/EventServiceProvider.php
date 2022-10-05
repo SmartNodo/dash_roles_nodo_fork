@@ -21,6 +21,12 @@ class EventServiceProvider extends ServiceProvider
         ScrapeCreditNumber::class => [
             ScrapeCreditNumberNotification::class,
         ],
+        ScrapeCreditNumber::class => [
+            ScrapeCreditNumberNotification::class,
+        ],
+        ScrapeCheckBalance::class => [
+            ScrapeCheckBalanceNotification::class,
+        ],
     ];
 
     /**
