@@ -86,8 +86,19 @@ class ScrapeCreditNumberNotification
             return $node->text();
         });
 
-        // Log::info('3.- error: ', ['error' => $error]);
-
+        Log::info('estado', ['.' => $result->filter('input[name="estado"]')->attr('value') ]);
+        Log::info('nombreDH', ['.' => $result->filter('input[name="nombreDH"]')->attr('value')]);
+        Log::info('nss', ['.' => $result->filter('input[name="nss"]')->attr('value')]);
+        Log::info('domicilio', ['.' => $result->filter('input[name="domicilio"]')->attr('value')]);
+        Log::info('codigoPostal', ['.' => $result->filter('input[name="codigoPostal"]')->attr('value')]);
+        Log::info('costoEcoTec', ['.' => $result->filter('input[name="costoEcoTec"]')->attr('value')]);
+        // Log::info('ahorroEcoSalario', ['.' => $result->filter('input[name="ahorroEcoSalario"]')->attr('value')]);
+        // Log::info('numAvaluo', ['.' => $result->filter('input[name="numAvaluo"]')->attr('value')]);
+        // Log::info('usuarioSimulado', ['.' => $result->filter('input[name="usuarioSimulado"]')->attr('value')]);
+        // Log::info('estadoMunicipio', ['.' => $result->filter('input[name="estadoMunicipio"]')->attr('value')]);
+        // Log::info('marcaVista', ['.' => $result->filter('input[name="marcaVista"]')->attr('value')]);
+        Log::info('isBroxel', ['.' => $result->filter('input[name="isBroxel"]')->attr('value')]);
+        Log::info('creditNumber', ['.' => $event->creditNumber]);
 
         if(!$error) {
             return [
@@ -100,11 +111,11 @@ class ScrapeCreditNumberNotification
                 'domicilio' => $result->filter('input[name="domicilio"]')->attr('value'),
                 'codigoPostal' => $result->filter('input[name="codigoPostal"]')->attr('value'),
                 'costoEcoTec' => $result->filter('input[name="costoEcoTec"]')->attr('value'),
-                'ahorroEcoSalario' => $result->filter('input[name="ahorroEcoSalario"]')->attr('value'),
-                'numAvaluo' => $result->filter('input[name="numAvaluo"]')->attr('value'),
-                'usuarioSimulado' => $result->filter('input[name="usuarioSimulado"]')->attr('value'),
-                'estadoMunicipio' => $result->filter('input[name="estadoMunicipio"]')->attr('value'),
-                'marcaVista' => $result->filter('input[name="marcaVista"]')->attr('value'),
+                // 'ahorroEcoSalario' => $result->filter('input[name="ahorroEcoSalario"]')->attr('value'),
+                // 'numAvaluo' => $result->filter('input[name="numAvaluo"]')->attr('value'),
+                // 'usuarioSimulado' => $result->filter('input[name="usuarioSimulado"]')->attr('value'),
+                // 'estadoMunicipio' => $result->filter('input[name="estadoMunicipio"]')->attr('value'),
+                // 'marcaVista' => $result->filter('input[name="marcaVista"]')->attr('value'),
                 'isBroxel' => $result->filter('input[name="isBroxel"]')->attr('value'),
                 'creditNumber' => $event->creditNumber
             ];
