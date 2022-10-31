@@ -46,18 +46,22 @@ let url = '';
 
 // Generate url with http or http if local or production enviroment:
 if (document.location.origin == 'http://localhost:8000') {
-    url = document.location.origin+'/api/list-credits';
+    url = `${document.location.origin}/api/list-credits`;
 } else {
     const updateUrl = document.location.origin+'/api/list-credits';
+    console.log(`updateUrl: ${updateUrl}`)
     url = updateUrl.replace(/^http:\/\//i, 'https://');
+    console.log(`url: ${url}`)
 }
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("Sitio lito: ")
     lista();
 
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault()
+        console.log($(this).attr('href'))
         pageNumber = $(this).attr('href').split('page=')[1];
         $('#hidden_page').val(pageNumber)
         lista(pageNumber)
@@ -67,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 async function lista(pageNumber = 1) {
-    const res = await fetch(url+`/?page=${pageNumber}`, {
+    console.log(`final endpoint: ${url}/?page=${pageNumber}`)
+    const res = await fetch(`${url}/?page=${pageNumber}`, {
         method:'GET',
         headers:{
             'Accept': 'application/json',
