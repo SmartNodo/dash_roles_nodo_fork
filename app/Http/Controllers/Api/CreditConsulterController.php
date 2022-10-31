@@ -68,7 +68,8 @@ class CreditConsulterController extends Controller
 
     }
 
-    public function listCredits(Request $request) {
+    public function listCredits(Request $request)
+    {
         $user_id = auth()->user()->id; //capturamos el ID del usuario
         $user_rols = auth()->user()->getRoleNames();
 
@@ -98,7 +99,7 @@ class CreditConsulterController extends Controller
             $credits = Credit::select('consulted_credits.*','users.name as user','states.name as state')
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
-            ->get();
+            ->paginate(10);
         }elseif($user_rols->contains('Administrador')){
             //  Elimina las concidencias en ambos arrays
             $idsUsers = array_diff($idsUsers, $idsys);
@@ -106,7 +107,7 @@ class CreditConsulterController extends Controller
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
-            ->get();
+            ->paginate(10);
         }elseif($user_rols->contains('Manager')){
             //  Elimina las concidencias en arrays
             $idsUsers = array_diff($idsUsers, $idsys, $idsad);
@@ -114,19 +115,22 @@ class CreditConsulterController extends Controller
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
-            ->get();
+            ->paginate(10);
         }else{
             $credits = Credit::where("user_id", $user_id)
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
-            ->get();
+            ->paginate(10);
         }
+
+        $paginationLinks = (string) $credits->links();
 
         return response()->json([
             "status" => 1,
             "msg" => "Credits",
-            "data" => $credits
+            "credits" => $credits,
+            "pagination" => $paginationLinks,
         ]);
     }
 

@@ -33,6 +33,7 @@ Route::group( ['middleware' => ["auth:sanctum"]], function(){
     // Ruta para guardar crédito en la BD
     Route::post('check-credit-number', [CreditConsulterController::class, 'checkCreditNumber']);
     Route::get("list-credits", [CreditConsulterController::class, "listCredits"]);
+    Route::get("list-credits?page={page}", [CreditConsulterController::class, "listCredits"]);
 
     // CRUD llaves de acceso
     Route::get('access-keys', [AccessKeyController::class, 'index'])->name('access-keys');
