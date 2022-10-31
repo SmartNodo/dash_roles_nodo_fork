@@ -42,7 +42,7 @@
 @section('scripts')
 <script>
 let _token = `{{ Session::get('bearer_token') }}`;
-let url = document.location.origin+'/api/list-credits';
+let url = '/api/list-credits';
 
 
 document.addEventListener('DOMContentLoaded', function () {
