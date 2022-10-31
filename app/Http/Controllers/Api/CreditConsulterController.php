@@ -99,6 +99,7 @@ class CreditConsulterController extends Controller
             $credits = Credit::select('consulted_credits.*','users.name as user','states.name as state')
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
+            ->orderBy('id', 'DESC')
             ->paginate(10);
         }elseif($user_rols->contains('Administrador')){
             //  Elimina las concidencias en ambos arrays
@@ -107,6 +108,7 @@ class CreditConsulterController extends Controller
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
+            ->orderBy('id', 'DESC')
             ->paginate(10);
         }elseif($user_rols->contains('Manager')){
             //  Elimina las concidencias en arrays
@@ -115,12 +117,14 @@ class CreditConsulterController extends Controller
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
+            ->orderBy('id', 'DESC')
             ->paginate(10);
         }else{
             $credits = Credit::where("user_id", $user_id)
             ->leftJoin('users','users.id','=','user_id')
             ->leftJoin('states','states.idState','=','idState_state')
             ->select('consulted_credits.*','users.name as user','states.name as state')
+            ->orderBy('id', 'DESC')
             ->paginate(10);
         }
 

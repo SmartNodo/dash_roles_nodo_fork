@@ -28,7 +28,7 @@
                                 <tbody id="tbody"></tbody>
                             </table>
                         </div>
-                        <div class="card-footer" id="cardFooter">
+                        <div class="card-footer m-auto" id="cardFooter">
                         </div>
                     </div>
                 </div>
@@ -74,19 +74,29 @@ async function lista(pageNumber) {
     $("#tbody").empty()
     $("#cardFooter").empty();
 
+    // Create our number formatter for balance data.
+    const currency = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+
     let tr = '';
     data.credits.data.forEach(credit => {
-        console.log(credit);
+        // format date
+        let created_at = new Date(credit.updated_at);
+
         tr += `<tr>
-                    <td>`+credit.id+`</td>
-                    <td>`+credit.user+`</td>
-                    <td>`+credit.state+`</td>
-                    <td>`+credit.nss+`</td>
-                    <td>`+credit.creditNumber+`</td>
-                    <td>`+credit.status+`</td>
-                    <td>`+credit.balance+`</td>
-                    <td>`+credit.email+`</td>
-                    <td>`+credit.updated_at+`</td>`
+                    <td>${credit.id}</td>
+                    <td>${credit.user}</td>
+                    <td>${credit.state}</td>
+                    <td>${credit.nss? credit.nss: ''}</td>
+                    <td>${credit.creditNumber}</td>
+                    <td>${credit.status}</td>
+                    <td>${currency.format(credit.balance)}</td>
+                    <td>${credit.email? credit.email: ''}</td>
+                    <td>${created_at.toLocaleDateString("es-MX")}
+                    </td>
+                <tr>`
     });
 
     $("#tbody").append(tr);
