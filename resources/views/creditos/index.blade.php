@@ -54,8 +54,7 @@ if (document.location.origin == 'http://localhost:8000') {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    let pageNumber = 1;
-    lista(pageNumber);
+    lista();
 
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault()
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 
-async function lista(pageNumber) {
+async function lista(pageNumber = 1) {
     const res = await fetch(url+`/?page=${pageNumber}`, {
         method:'GET',
         headers:{
