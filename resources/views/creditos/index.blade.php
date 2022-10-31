@@ -42,7 +42,16 @@
 @section('scripts')
 <script>
 let _token = `{{ Session::get('bearer_token') }}`;
-let url = '/api/list-credits';
+let url = '';
+
+// Generate url with http or http if local or production enviroment:
+if (document.location.origin == 'http://localhost:8000') {
+    const url = document.location.origin+'/api/list-credits';
+} else {
+    const updateUrl = document.location.origin+'/api/list-credits';
+    url = updateUrl.replace(/^http:\/\//i, 'https://');
+}
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
